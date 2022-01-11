@@ -1,9 +1,10 @@
-import { Entity, Column, PrimaryColumn } from "typeorm";
+import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm";
 import { v4 as uuid } from "uuid";
+import { Post } from "./Post";
 
 @Entity("Users")
 export class User {
-  @PrimaryColumn()
+  @PrimaryColumn("uuid")
   readonly id!: string;
 
   @Column("varchar", { length: 40 })
@@ -14,6 +15,13 @@ export class User {
 
   @Column("varchar", { length: 7 })
   _deleted!: string;
+
+  @OneToMany(
+    () => Post,
+    post => post.user,
+    { cascade: true }
+  )
+  posts!: Post[];
 
   constructor() {
     if (!this.id) this.id = uuid();

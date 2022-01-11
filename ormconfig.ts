@@ -9,8 +9,20 @@ export default {
   database: "api_dev",
   synchronize: true,
   logging: false,
+  entities: ["src/database/entity/*.ts"],
+  migrations: ["src/database/migration/*.ts"],
+  cli: {
+    migrationsDir: "src/database/migration",
+    entitiesDir: "src/database/entity"
+  }
+};
+
+const i = {
+  type: "sqlite",
+  database: `src/database/sqlite/dataBase.sqlite`,
   entities: ["src/database/entity/**/*.ts"],
   migrations: ["src/database/migration/**/*.ts"],
+  logging: false,
   cli: {
     migrationsDir: "src/database/migration",
     entitiesDir: "src/database/entity"

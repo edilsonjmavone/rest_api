@@ -7,9 +7,6 @@ import { router } from "./router";
 const app = express();
 const port = process.env.PORT || 3000;
 
-//console.log(`${process.env.PASW} ${process.env.USERNANEM}`);
-
-// write head Access-Control-Allow-Origin: *
 app.use(cors());
 app.use(express.json());
 app.use(router);

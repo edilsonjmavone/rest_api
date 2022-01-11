@@ -1,7 +1,9 @@
 node_modules
 .env
+build
 # some development tools
-client.http 
+request.http 
 api_dev Session.sql
 .vscode
 data
+src/database/sqlite
