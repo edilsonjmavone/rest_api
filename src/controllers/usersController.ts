@@ -1,29 +1,24 @@
-import { getRepository } from "typeorm";
+import { getRepository, getCustomRepository } from "typeorm";
 import { User } from "../database/entity/User";
 import { Request, Response, NextFunction } from "express";
+import { UserRepository } from "../database/repositorys/UserRepository";
 
 class UserController {
   async getUser(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params;
-    const UserRepository = getRepository(User);
+    const userRepository = getCustomRepository(UserRepository);
 
     try {
-      if (!id) {
-        const data = await UserRepository.find({ _deleted: "false" });
-        if (data.length == 0)
-          return res.status(404).json({ msg: "user not found" });
-        return res.status(200).send({ data, msg: "working" });
-      } else {
-        const data = await UserRepository.find({ id, _deleted: "false" });
-        if (data.length == 0)
-          return res.status(404).json({ msg: "user not found" });
-        return res.status(200).send({ data, msg: "working" });
-      }
+      const data = await userRepository.getAll(id);
+      if (data.length == 0)
+        return res.status(404).json({ msg: "User not found" });
+
+      return res.status(200).send({ data });
     } catch (error) {
       console.warn(error);
       return res
         .status(500)
-        .json({ error: "internal server error" })
+        .json({ error: "Internal server error" })
         .end();
     }
   }
@@ -39,7 +34,7 @@ class UserController {
       if (usrAlredyexists)
         return res
           .status(400)
-          .json({ error: "user alredy exists" })
+          .json({ error: "User alredy exists" })
           .end();
 
       const usr = UserRepository.create({
@@ -53,7 +48,7 @@ class UserController {
       console.warn(error);
       return res
         .status(500)
-        .json({ error: "internal server error" })
+        .json({ error: "Internal server error" })
         .end();
     }
   }
@@ -64,7 +59,7 @@ class UserController {
     try {
       const usr = await UserRepository.find({ id, _deleted: "false" });
       if (usr.length == 0)
-        return res.status(404).json({ msg: "user not found" });
+        return res.status(404).json({ msg: "User not found" });
 
       await UserRepository.update({ id }, { name });
       const data = await UserRepository.find({ id });
@@ -74,7 +69,7 @@ class UserController {
       console.warn(error);
       return res
         .status(500)
-        .json({ error: "internal server error" })
+        .json({ error: "Internal server error" })
         .end();
     }
   }
@@ -86,7 +81,7 @@ class UserController {
       const usr = await UserRepository.find({ id });
 
       if (usr.length == 0)
-        return res.status(404).json({ msg: "user not found" });
+        return res.status(404).json({ msg: "User not found" });
 
       await UserRepository.update({ id }, { _deleted: "true" });
 
@@ -95,7 +90,7 @@ class UserController {
       console.warn(error);
       return res
         .status(500)
-        .json({ error: "internal server error" })
+        .json({ error: "Internal server error" })
         .end();
     }
   }

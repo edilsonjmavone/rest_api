@@ -1,45 +1,41 @@
 import { Request, Response } from "express";
-import { getRepository } from "typeorm";
-import { User } from "../database/entity/User";
-import { Post } from "../database/entity/Post";
+import { getCustomRepository } from "typeorm";
+import { PostRepository } from "../database/repositorys/PostRepository";
+import { UserRepository } from "../database/repositorys/UserRepository";
 
 export class PostController {
   async getPost(req: Request, res: Response) {
-    const postRepository = getRepository(Post);
+    const postRepository = getCustomRepository(PostRepository);
     try {
-      const post = await postRepository.find({
-        relations: ["user"]
-      });
+      const data = await postRepository.getAll();
 
-      return res.status(200).send({ post, msg: "working" });
+      return res.status(200).send({ data });
     } catch (error) {
       console.warn(error);
       return res
         .status(500)
-        .json({ error: "internal server error" })
+        .json({ error: "Internal server error" })
         .end();
     }
   }
   async addPost(req: Request, res: Response) {
     const { text, userID } = req.body;
 
-    const userRpository = getRepository(User);
+    const userRpository = getCustomRepository(UserRepository);
     try {
-      const usrExistis = await userRpository.findOne(userID);
-      if (!usrExistis) return res.status(404).json({ msg: "user not found" });
+      const userAlredyExists = await userRpository.findOne(userID);
 
-      const postRepository = getRepository(Post);
-      const pts = postRepository.create({
-        text
-      });
-      pts.user = usrExistis;
-      await postRepository.save(pts);
+      if (!userAlredyExists)
+        return res.status(404).json({ msg: "User not found" });
+
+      await getCustomRepository(PostRepository).addPost(text, userAlredyExists);
+
       return res.status(204).end();
     } catch (error) {
       console.warn(error);
       return res
         .status(500)
-        .json({ error: "internal server error" })
+        .json({ error: "Internal server error" })
         .end();
     }
   }

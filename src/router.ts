@@ -5,8 +5,8 @@ const userController = new UserController();
 const postController = new PostController();
 export const router = Router();
 router
-  .get("/ping", (req, res) => res.end("Server Working..."))
-  .get("/post", postController.getPost)
+  .get("/ping", (req, res) => res.json("Server Working..."))
+  .get("/posts", postController.getPost)
   .get("/users", userController.getUser)
   .get("/users/:id", userController.getUser)
   .post("/post", postController.addPost)
