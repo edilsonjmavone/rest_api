@@ -9,7 +9,7 @@ router
   .get("/posts", postController.getPost)
   .get("/users", userController.getUser)
   .get("/users/:id", userController.getUser)
-  .post("/post", postController.addPost)
+  .post("/posts", postController.addPost)
   .post("/users", userController.addUser)
   .patch("/users/update/:id", userController.updateUser)
   .delete("/users/delete/:id", userController.deleteUser);
