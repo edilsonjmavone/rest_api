@@ -6,17 +6,29 @@ import { Post } from "../entity/Post";
 export class PostRepository extends Repository<Post> {
   async getAll() {
     let data: any = [];
-    const post = await this.find({ //TODO:Handle Promise Rejection
-      relations: ["user"]
-    });
-    post.forEach(dat => data.push({ userName: dat.user.name, text: dat.text }));
-    return data;
+    try {
+      const post = await this.find({
+        //TODO:Handle Promise Rejection
+        relations: ["user"]
+      });
+
+      post.forEach(dat =>
+        data.push({ userName: dat.user.name, text: dat.text })
+      );
+      return data;
+    } catch (error) {
+      throw error;
+    }
   }
   async addPost(text: string, user: User) {
     const pts = this.create({
       text,
       user
     });
-    await this.save(pts); //TODO:Handle Promise Rejection
+    try {
+      await this.save(pts); //TODO:Handle Promise Rejection
+    } catch (error) {
+      throw error;
+    }
   }
 }

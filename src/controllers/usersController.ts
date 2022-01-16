@@ -13,24 +13,25 @@ class UserController {
 
     try {
       const data = await userRepository.getAll(id);
-      if (data.length == 0) next(new HandleError("User not found", 404));
 
+      if (data.length == 0) {
+        next(new HandleError("User not found", 401));
+        return;
+      }
       return res.status(200).send({ data });
     } catch (error) {
       next(new HandleError("Internal server error"));
-
-      console.log(`next() activated`);
-      //return res
-      //  .status(500)
-      //  .json({ error: "Internal server error" })
-      //  .end();
+      return;
     }
   }
   async addUser(req: Request, res: Response, next: NextFunction) {
     const { name, email, password } = req.body;
 
     const { isValid, message } = validator.user(name, email, password);
-    if (!isValid) return res.status(400).json(message);
+    if (!isValid) {
+      next(new HandleError(message, 400));
+      return; // error handling
+    }
 
     const UserRepository = getRepository(User);
     try {
@@ -40,11 +41,9 @@ class UserController {
       });
 
       if (usrAlredyexists) {
-        //TODO: Solve error handling problems
-        return res
-          .status(400)
-          .json({ error: "User alredy exists" })
-          .end();
+        next(new HandleError("User alredy exists"));
+        return;
+        // error handling
       }
 
       const usr = UserRepository.create({
@@ -52,14 +51,13 @@ class UserController {
         email,
         _deleted: "false"
       });
+
       await UserRepository.save(usr);
+
       return res.status(204).json(usr);
     } catch (error) {
       next(new HandleError("Internal server error"));
-      // return res
-      //   .status(500)
-      //   .json({ error: "Internal server error" })
-      //   .end();
+      return;
     }
   }
   async updateUser(req: Request, res: Response, next: NextFunction) {
@@ -69,7 +67,11 @@ class UserController {
     try {
       const usr = await UserRepository.find({ id, _deleted: "false" });
 
-      if (usr.length == 0) next(new HandleError("User not fund"));
+      if (usr.length == 0) {
+        next(new HandleError("User not found"));
+        return;
+        // error handling
+      }
 
       await UserRepository.update({ id }, { name });
       const data = await UserRepository.find({ id });
@@ -77,10 +79,8 @@ class UserController {
       return res.status(204).json({ data, msg: "sdf" });
     } catch (error) {
       next(new HandleError("Internal server error"));
-      // return res
-      //   .status(500)
-      //   .json({ error: "Internal server error" })
-      //   .end();
+      return;
+      // error handling
     }
   }
   async deleteUser(req: Request, res: Response, next: NextFunction) {
@@ -90,19 +90,18 @@ class UserController {
     try {
       const usr = await UserRepository.find({ id });
 
-      if (usr.length == 0) next(new HandleError("User not found", 404));
-
+      if (usr.length == 0) {
+        next(new HandleError("User not found", 404));
+        return; // error handling
+      }
       await UserRepository.update({ id }, { _deleted: "true" });
 
       return res.status(204).json({ msg: `${id} DELETED` });
     } catch (error) {
       next(new HandleError("Internal server error"));
-      // return res
-      //   .status(500)
-      //   .json({ error: "Internal server error" })
-      //   .end();
+      return;
+      // error handling
     }
   }
 }
-
 export { UserController };

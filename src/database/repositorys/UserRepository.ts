@@ -5,11 +5,19 @@ import { User } from "../entity/User";
 export class UserRepository extends Repository<User> {
   async getAll(id?: string) {
     if (id) {
-      const oneUsr = await this.find({ id, _deleted: "false" }); //TODO:Handle Promise Rejection
-      return this.parseData(oneUsr);
+      try {
+        const oneUsr = await this.find({ id, _deleted: "false" });
+        return this.parseData(oneUsr);
+      } catch (error) {
+        throw error;
+      }
     }
-    const manyUsr = await this.find({ _deleted: "false" }); //TODO:Handle Promise Rejection
-    return this.parseData(manyUsr);
+    try {
+      const manyUsr = await this.find({ _deleted: "false" });
+      return this.parseData(manyUsr);
+    } catch (error) {
+      throw error;
+    }
   }
   private parseData(data: User[]) {
     let parsedData: any = [];

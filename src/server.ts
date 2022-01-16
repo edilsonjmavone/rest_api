@@ -15,14 +15,20 @@ app.use(express.json());
 app.use(privateRoutes);
 
 app.use((err: HandleError, req: Request, res: Response, next: NextFunction) => {
-  res
-    .json({
-      Error: {
-        name: err.name,
-        message: err.message
-      }
-    })
-    .status(err.status || 500);
+  if (!err.status) {
+    next();
+    return;
+  }
+  res.status(err.status).json({
+    Error: {
+      name: err.name,
+      message: err.message
+    }
+  });
+});
+
+app.use((req: Request, res: Response) => {
+  res.status(400).json({ msg: `${req.path} unavalidable` });
 });
 
 if (!port) {

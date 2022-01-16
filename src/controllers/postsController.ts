@@ -13,13 +13,18 @@ export class PostController {
 
       return res.status(200).send({ data });
     } catch (error) {
-      next(new HandleError("Internal server error", 404));
+      next(new HandleError("Internal server error"));
+      return;
     }
   }
   async addPost(req: Request, res: Response, next: NextFunction) {
     const { text, userID } = req.body;
     const { isValid, message } = validator.post(userID, text);
-    if (!isValid) return res.status(400).json(message);
+
+    if (!isValid) {
+      next(new HandleError(message, 400));
+      return;
+    }
 
     const userRpository = getCustomRepository(UserRepository);
     try {
@@ -35,6 +40,7 @@ export class PostController {
       return res.status(204).end();
     } catch (error) {
       next(new HandleError("Internal server error"));
+      return;
     }
   }
 }

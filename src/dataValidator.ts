@@ -47,16 +47,16 @@ export default class Validator {
   login(email: string, password: string) {
     const { error, value } = loginData.validate({ email, password });
     if (error) return { isValid: false, message: error.details[0].message };
-    return { isValid: true };
+    return { isValid: true, message: "" };
   }
   user(name: string, email: string, password: string) {
     const { error, value } = newUserData.validate({ name, email, password });
     if (error) return { isValid: false, message: error.details[0].message };
-    return { isValid: true };
+    return { isValid: true, message: "" };
   }
   post(userID: string, text: string) {
     const { error, value } = newPostData.validate({ userID, text });
     if (error) return { isValid: false, message: error.details[0].message };
-    return { isValid: true };
+    return { isValid: true, message: "" };
   }
 }

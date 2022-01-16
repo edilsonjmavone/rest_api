@@ -9,7 +9,7 @@ const userLoginController = new UserLoginController();
 
 export const privateRoutes = Router();
 privateRoutes
-  .get("/pong", (req, res) => res.json("Server Working..."))
+  .get("/ping", (req, res) => res.json("Server Working..."))
   .post("/user/login", userLoginController.login)
   .get("/posts", postController.getPost)
   .get("/users", userController.getUser)
