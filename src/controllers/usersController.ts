@@ -3,6 +3,8 @@ import { User } from "../database/entity/User";
 import { Request, Response, NextFunction } from "express";
 import { UserRepository } from "../database/repositorys/UserRepository";
 import { HandleError } from "../error/handleError";
+import Validator from "../dataValidator";
+const validator = new Validator();
 
 class UserController {
   async getUser(req: Request, res: Response, next: NextFunction) {
@@ -15,7 +17,7 @@ class UserController {
 
       return res.status(200).send({ data });
     } catch (error) {
-      next(new HandleError(error, 500));
+      next(new HandleError("Internal server error"));
 
       console.log(`next() activated`);
       //return res
@@ -25,7 +27,11 @@ class UserController {
     }
   }
   async addUser(req: Request, res: Response, next: NextFunction) {
-    const { name, email } = req.body;
+    const { name, email, password } = req.body;
+
+    const { isValid, message } = validator.user(name, email, password);
+    if (!isValid) return res.status(400).json(message);
+
     const UserRepository = getRepository(User);
     try {
       const usrAlredyexists = await UserRepository.findOne({
@@ -33,11 +39,13 @@ class UserController {
         _deleted: "false"
       });
 
-      if (usrAlredyexists) next(new HandleError("User alredy exists", 404));
-      // return res
-      //   .status(400)
-      //   .json({ error: "User alredy exists" })
-      //   .end();
+      if (usrAlredyexists) {
+        //TODO: Solve error handling problems
+        return res
+          .status(400)
+          .json({ error: "User alredy exists" })
+          .end();
+      }
 
       const usr = UserRepository.create({
         name,
@@ -47,7 +55,7 @@ class UserController {
       await UserRepository.save(usr);
       return res.status(204).json(usr);
     } catch (error) {
-      next(new HandleError(error));
+      next(new HandleError("Internal server error"));
       // return res
       //   .status(500)
       //   .json({ error: "Internal server error" })
@@ -68,7 +76,7 @@ class UserController {
 
       return res.status(204).json({ data, msg: "sdf" });
     } catch (error) {
-      next(new HandleError(error));
+      next(new HandleError("Internal server error"));
       // return res
       //   .status(500)
       //   .json({ error: "Internal server error" })
@@ -88,7 +96,7 @@ class UserController {
 
       return res.status(204).json({ msg: `${id} DELETED` });
     } catch (error) {
-      next(new HandleError(error));
+      next(new HandleError("Internal server error"));
       // return res
       //   .status(500)
       //   .json({ error: "Internal server error" })

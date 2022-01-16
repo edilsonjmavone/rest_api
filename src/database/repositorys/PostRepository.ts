@@ -6,7 +6,7 @@ import { Post } from "../entity/Post";
 export class PostRepository extends Repository<Post> {
   async getAll() {
     let data: any = [];
-    const post = await this.find({
+    const post = await this.find({ //TODO:Handle Promise Rejection
       relations: ["user"]
     });
     post.forEach(dat => data.push({ userName: dat.user.name, text: dat.text }));
@@ -17,6 +17,6 @@ export class PostRepository extends Repository<Post> {
       text,
       user
     });
-    await this.save(pts);
+    await this.save(pts); //TODO:Handle Promise Rejection
   }
 }
