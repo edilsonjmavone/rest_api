@@ -1,4 +1,11 @@
-import { Entity, Column, PrimaryColumn, OneToMany } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryColumn,
+  OneToMany,
+  CreateDateColumn,
+  DeleteDateColumn
+} from "typeorm";
 import { v4 as uuid } from "uuid";
 import { Post } from "./Post";
 
@@ -13,7 +20,13 @@ export class User {
   @Column("varchar", { length: 100 })
   email!: string;
 
-  @Column("varchar", { length: 7 })
+  @Column()
+  password!: string;
+
+  @CreateDateColumn()
+  created_at!: Date;
+
+  @DeleteDateColumn({ nullable: true })
   _deleted!: string;
 
   @OneToMany(

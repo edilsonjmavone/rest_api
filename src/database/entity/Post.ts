@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryColumn, ManyToOne, IsNull } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryColumn,
+  ManyToOne,
+  CreateDateColumn
+} from "typeorm";
 import { v4 as uuid } from "uuid";
 import { User } from "./User";
 
@@ -6,15 +12,20 @@ import { User } from "./User";
 export class Post {
   @PrimaryColumn("uuid")
   readonly id!: string;
+
   @Column()
   text!: string;
+
+  @CreateDateColumn()
+  created_at!: Date;
+
   @ManyToOne(
     () => User,
     user => user.posts,
     { onDelete: "CASCADE" }
   )
   user!: User;
-  //TODO: understand and fix this thing
+
   constructor() {
     if (!this.id) this.id = uuid();
   }

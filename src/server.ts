@@ -3,16 +3,16 @@ import "./database";
 import cors from "cors";
 import express, { NextFunction, Response, Request } from "express";
 import "dotenv/config";
-import { privateRoutes } from "./routes/router";
+import { privateRoutes, publicRoutes } from "./routes/router";
 import { HandleError } from "./error/handleError";
-import { verify } from "./routes/acessValidator";
+import { verify } from "./acessValidator";
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
-//app.use(verify);
-app.use(privateRoutes);
+app.use(publicRoutes);
+app.use(verify, privateRoutes);
 
 app.use((err: HandleError, req: Request, res: Response, next: NextFunction) => {
   if (!err.status) {
@@ -37,5 +37,5 @@ if (!port) {
 }
 app.listen(port, () => {
   console.clear();
-  console.log(`Api server runnig at https://localhost:${port}`);
+  console.log(`Api server runnig at http://localhost:${port}`);
 });

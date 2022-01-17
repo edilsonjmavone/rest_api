@@ -9,8 +9,6 @@ const userLoginController = new UserLoginController();
 
 export const privateRoutes = Router();
 privateRoutes
-  .get("/ping", (req, res) => res.json("Server Working..."))
-  .post("/user/login", userLoginController.login)
   .get("/posts", postController.getPost)
   .get("/users", userController.getUser)
   .get("/users/:id", userController.getUser)
@@ -18,3 +16,8 @@ privateRoutes
   .post("/users", userController.addUser)
   .patch("/users/update/:id", userController.updateUser)
   .delete("/users/delete/:id", userController.deleteUser);
+
+export const publicRoutes = Router();
+publicRoutes
+  .get("/ping", (req, res) => res.json("Server Working..."))
+  .post("/user/login", userLoginController.login);
