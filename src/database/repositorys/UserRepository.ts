@@ -6,14 +6,14 @@ export class UserRepository extends Repository<User> {
   async getAll(id?: string) {
     if (id) {
       try {
-        const oneUsr = await this.find({ id, _deleted: "false" });
+        const oneUsr = await this.find({ id });
         return this.parseData(oneUsr);
       } catch (error) {
         throw error;
       }
     }
     try {
-      const manyUsr = await this.find({ _deleted: "false" });
+      const manyUsr = await this.find({});
       return this.parseData(manyUsr);
     } catch (error) {
       throw error;

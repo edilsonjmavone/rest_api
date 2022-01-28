@@ -3,7 +3,7 @@ import { getCustomRepository } from "typeorm";
 import { PostRepository } from "../database/repositorys/PostRepository";
 import { UserRepository } from "../database/repositorys/UserRepository";
 import { HandleError } from "../error/handleError";
-import Validator from "../dataValidator";
+import Validator from "../validation/dataValidator";
 const validator = new Validator();
 export class PostController {
   async getPost(req: Request, res: Response, next: NextFunction) {

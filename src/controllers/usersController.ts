@@ -3,7 +3,8 @@ import { User } from "../database/entity/User";
 import { Request, Response, NextFunction } from "express";
 import { UserRepository } from "../database/repositorys/UserRepository";
 import { HandleError } from "../error/handleError";
-import Validator from "../dataValidator";
+import Validator from "../validation/dataValidator";
+import { genPawHash } from "../validation/passwordValidator";
 const validator = new Validator();
 
 class UserController {
@@ -36,8 +37,7 @@ class UserController {
     const UserRepository = getRepository(User);
     try {
       const usrAlredyexists = await UserRepository.findOne({
-        email,
-        _deleted: "false"
+        email
       });
 
       if (usrAlredyexists) {
@@ -49,7 +49,7 @@ class UserController {
       const usr = UserRepository.create({
         name,
         email,
-        _deleted: "false"
+        password: genPawHash(password)
       });
 
       await UserRepository.save(usr);
@@ -94,7 +94,7 @@ class UserController {
         next(new HandleError("User not found", 404));
         return; // error handling
       }
-      await UserRepository.update({ id }, { _deleted: "true" });
+      await UserRepository.softDelete({ id });
 
       return res.status(204).json({ msg: `${id} DELETED` });
     } catch (error) {

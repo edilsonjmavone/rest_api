@@ -1,5 +1,6 @@
 node_modules
-.env
+.env.dev
+.env.production
 build
 # some development tools
 #request.http 

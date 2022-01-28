@@ -13,7 +13,12 @@ export class PostRepository extends Repository<Post> {
       });
 
       post.forEach(dat =>
-        data.push({ userName: dat.user.name, text: dat.text })
+        data.push({
+          id: dat.id,
+          userName: dat.user.name,
+          text: dat.text,
+          time: dat.created_at
+        })
       );
       return data;
     } catch (error) {

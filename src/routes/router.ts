@@ -9,15 +9,31 @@ const userLoginController = new UserLoginController();
 
 export const privateRoutes = Router();
 privateRoutes
-  .get("/posts", postController.getPost)
   .get("/users", userController.getUser)
   .get("/users/:id", userController.getUser)
-  .post("/posts", postController.addPost)
-  .post("/users", userController.addUser)
   .patch("/users/update/:id", userController.updateUser)
-  .delete("/users/delete/:id", userController.deleteUser);
+  .delete("/users/delete/:id", userController.deleteUser)
+  .post("/posts", postController.addPost);
+  
+  export const publicRoutes = Router();
+  publicRoutes
+  .get("/ping", (req, res) => {
+    res.status(200);
+    res.json(serverRoutes);
+  })
+  .post("/users", userController.addUser)
+  .post("/user/login", userLoginController.login)
+  .get("/posts", postController.getPost);
 
-export const publicRoutes = Router();
-publicRoutes
-  .get("/ping", (req, res) => res.json("Server Working..."))
-  .post("/user/login", userLoginController.login);
+const serverRoutes = {
+  user_methods: {
+    getUser: `GET http://192.168.8.100:${process.env.PORT}/users`,
+    addUser: `POST http://192.168.8.100:${process.env.PORT}/users`,
+    updateUser: `PATCH  http://192.168.8.100:${process.env.PORT}/users/update:id`,
+    deleteUser: `DELETE http://192.168.8.100:${process.env.PORT}/users/delete/:id`
+  },
+  post_methods: {
+    getPost: `GET http://192.168.8.100:${process.env.PORT}/posts`,
+    addPost: `POST http://192.168.8.100:${process.env.PORT}/posts`
+  }
+};

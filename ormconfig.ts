@@ -1,4 +1,7 @@
-import "dotenv/config";
+import dotenv from "dotenv";
+dotenv.config({
+  path: process.env.NODE_ENV === "dev" ? ".env.dev" : ".env.production"
+});
 
 export default {
   type: "mysql",
@@ -9,22 +12,10 @@ export default {
   database: "api_dev",
   synchronize: true,
   logging: false,
-  entities: ["src/database/entity/*.ts"],
-  migrations: ["src/database/migration/*.ts"],
+  entities: [process.env.TYPEORM_ENTITIES],
+  migrations: [process.env.TYPEORM_MIGRATIONS],
   cli: {
-    migrationsDir: "src/database/migration",
-    entitiesDir: "src/database/entity"
-  }
-};
-
-const i = {
-  type: "sqlite",
-  database: `src/database/sqlite/dataBase.sqlite`,
-  entities: ["src/database/entity/**/*.ts"],
-  migrations: ["src/database/migration/**/*.ts"],
-  logging: false,
-  cli: {
-    migrationsDir: "src/database/migration",
-    entitiesDir: "src/database/entity"
+    migrationsDir: process.env.TYPEORM_MIGRATIONS_DIR,
+    entitiesDir: process.env.TYPEORM_ENTITIES_DIR
   }
 };
