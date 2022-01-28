@@ -20,7 +20,7 @@ export class User {
   @Column("varchar", { length: 100 })
   email!: string;
 
-  @Column()
+  @Column("varchar", { length: 200 })
   password!: string;
 
   @CreateDateColumn()

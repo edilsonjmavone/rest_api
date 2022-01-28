@@ -13,7 +13,7 @@ export class Post {
   @PrimaryColumn("uuid")
   readonly id!: string;
 
-  @Column()
+  @Column("varchar", { length: 100 })
   text!: string;
 
   @CreateDateColumn()

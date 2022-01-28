@@ -4,8 +4,9 @@
   "description": "A basic rest Api",
   "main": "src/app.ts",
   "scripts": {
+    "prod": " NODE_ENV=production node build/app.js",
     "dev": "NODE_ENV=dev ts-node-dev --respawn --transpile-only src/app.ts",
-    "build": " NODE_ENV=production tsc",
+    "build": "NODE_ENV=production tsc --target ES5 --experimentalDecorators --emitDecoratorMetadata",
     "typeorm": "ts-node-dev node_modules/typeorm/cli.js",
     "typeorm:schema:sync": "ts-node-dev node_modules/typeorm/cli.js schema:sync"
   },

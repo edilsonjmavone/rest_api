@@ -36,16 +36,3 @@ app.use((req: Request, res: Response) => {
 });
 
 export default app;
-/**
- * "
-
-"id": "4dfc300f-5ae5-4650-bc50-45d8c8bcb254",
-"name": "test",
-"email": "testemail@wezz.com"
-},
-{
-"id": "a4146933-1538-491d-b34e-3ebe31597610",
-"name": "test",
-"email": "testemail@wezz.com"
-
- */

@@ -1,9 +1,12 @@
-import dotenv from "dotenv";
+const dotenv = require("dotenv");
+const env = process.env.NODE_ENV;
+console.log(`${env} from seila `);
+
 dotenv.config({
-  path: process.env.NODE_ENV === "dev" ? ".env.dev" : ".env.production"
+  path: process.env.NODE_ENV == "dev" ? ".env.dev" : ".env.production"
 });
 
-export default {
+module.exports = {
   type: "mysql",
   host: "localhost",
   port: 3306,
