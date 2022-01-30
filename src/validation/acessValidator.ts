@@ -6,11 +6,10 @@ const secretRefreshKey = process.env.SECRET_REFRESH_KEY!;
 
 //verify the Auth token
 export const verify = (req: Request, res: Response, next: NextFunction) => {
-  let token = req.header("Auth-Token");
-  console.log("jsdf");
+  const { AuthToken } = res.locals.cookie;
   try {
-    if (token) {
-      const verified = jwt.verify(token, secretKey);
+    if (AuthToken) {
+      const verified = jwt.verify(AuthToken, secretKey);
       next();
     } else {
       return res.status(400).json({ error: { message: "Forbiden" } });

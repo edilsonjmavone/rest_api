@@ -2,22 +2,14 @@ import { Router, Request, Response, NextFunction } from "express";
 import { UserController } from "../controllers/usersController";
 import { PostController } from "../controllers/postsController";
 import { UserLoginController } from "../controllers/userLoginController";
-import { verifyRefresh } from "../validation/acessValidator";
+import { verifyRefresh, verify } from "../validation/acessValidator";
 
 const userController = new UserController();
 const postController = new PostController();
 const userLoginController = new UserLoginController();
 
-export const privateRoutes = Router();
-privateRoutes
-  .get("/users", userController.getUser)
-  .get("/users/:id", userController.getUser)
-  .patch("/users/update/:id", userController.updateUser)
-  .delete("/users/delete/:id", userController.deleteUser)
-  .post("/posts", postController.addPost);
-
-export const publicRoutes = Router();
-publicRoutes
+export const routes = Router();
+routes
   .post("/user/sigin", userController.addUser)
   .post("/user/login", userLoginController.login)
   .get("/user/refresh", verifyRefresh, userLoginController.userRefreshAuth)
@@ -26,7 +18,12 @@ publicRoutes
   .get("/ping", (req, res) => {
     res.status(200);
     res.json({ yourCookies: res.locals.cookie, serverRoutes });
-  });
+  })
+  .get("/users", verify, userController.getUser)
+  .get("/users/:id", verify, userController.getUser)
+  .patch("/users/update/:id", verify, userController.updateUser)
+  .delete("/users/delete/:id", verify, userController.deleteUser)
+  .post("/posts", verify, postController.addPost);
 
 const serverRoutes = {
   user_methods: {

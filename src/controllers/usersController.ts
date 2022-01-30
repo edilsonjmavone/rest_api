@@ -19,7 +19,7 @@ class UserController {
         next(new HandleError("User not found", 401));
         return;
       }
-      return res.status(200).send({ data });
+      return res.status(200).send(data);
     } catch (error) {
       next(new HandleError("Internal server error"));
       return;
@@ -76,7 +76,7 @@ class UserController {
       await UserRepository.update({ id }, { name });
       const data = await UserRepository.find({ id });
 
-      return res.status(204).json({ data, msg: "sdf" });
+      return res.status(204).json(data);
     } catch (error) {
       next(new HandleError("Internal server error"));
       return;

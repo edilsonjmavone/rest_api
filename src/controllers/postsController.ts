@@ -12,7 +12,7 @@ export class PostController {
     try {
       const data = await postRepository.getAll();
 
-      return res.status(200).send({ data });
+      return res.status(200).send(data);
     } catch (error) {
       next(new HandleError("Internal server error"));
       return;
