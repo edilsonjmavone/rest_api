@@ -89,4 +89,24 @@ export class UserLoginController {
       next(new HandleError("Internal server error [refreshing auth-token]"));
     }
   }
+  async logout(req: Request, res: Response, next: NextFunction) {
+    const refreshTokenCookie = res.locals.cookie.RefreshToken;
+    if (!refreshTokenCookie)
+      return res.status(400).json({ error: { message: "log in first" } });
+    const userRepository = getCustomRepository(UserRepository);
+    const tokenData = getRefreshTokenData(refreshTokenCookie);
+    try {
+      const userExists = await userRepository.findOne((<any>tokenData).id);
+      if (!userExists)
+        return res.status(400).json({ error: { message: "User not found" } });
+      await userRepository.update(
+        { id: userExists.id },
+        { refreshToken: null }
+      );
+      res.clearCookie("RefreshToken");
+      return res.status(200).end();
+    } catch (error) {
+      next(new HandleError("Internal server error [in log out ]"));
+    }
+  }
 }

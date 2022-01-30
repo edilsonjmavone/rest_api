@@ -21,6 +21,7 @@ publicRoutes
   .post("/user/sigin", userController.addUser)
   .post("/user/login", userLoginController.login)
   .get("/user/refresh", verifyRefresh, userLoginController.userRefreshAuth)
+  .get("/user/logout", verifyRefresh, userLoginController.logout)
   .get("/posts", postController.getPost)
   .get("/ping", (req, res) => {
     res.status(200);
