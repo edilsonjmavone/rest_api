@@ -23,6 +23,9 @@ export class User {
   @Column("varchar", { length: 200 })
   password!: string;
 
+  @Column("varchar", { length: 250, nullable: true })
+  refreshToken!: string;
+
   @CreateDateColumn()
   created_at!: Date;
 

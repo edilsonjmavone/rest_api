@@ -2,6 +2,7 @@ import { Router, Request, Response, NextFunction } from "express";
 import { UserController } from "../controllers/usersController";
 import { PostController } from "../controllers/postsController";
 import { UserLoginController } from "../controllers/userLoginController";
+import { verifyRefresh } from "../validation/acessValidator";
 
 const userController = new UserController();
 const postController = new PostController();
@@ -14,16 +15,17 @@ privateRoutes
   .patch("/users/update/:id", userController.updateUser)
   .delete("/users/delete/:id", userController.deleteUser)
   .post("/posts", postController.addPost);
-  
-  export const publicRoutes = Router();
-  publicRoutes
+
+export const publicRoutes = Router();
+publicRoutes
+  .post("/user/sigin", userController.addUser)
+  .post("/user/login", userLoginController.login)
+  .get("/user/refresh", verifyRefresh, userLoginController.userRefreshAuth)
+  .get("/posts", postController.getPost)
   .get("/ping", (req, res) => {
     res.status(200);
-    res.json(serverRoutes);
-  })
-  .post("/users", userController.addUser)
-  .post("/user/login", userLoginController.login)
-  .get("/posts", postController.getPost);
+    res.json({ yourCookies: res.locals.cookie, serverRoutes });
+  });
 
 const serverRoutes = {
   user_methods: {

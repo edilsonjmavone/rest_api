@@ -32,10 +32,6 @@ const newUserData = joi.object({
 });
 
 const newPostData = joi.object({
-  userID: joi
-    .string()
-    .guid()
-    .required(),
   text: joi
     .string()
     .min(1)
@@ -54,8 +50,8 @@ export default class Validator {
     if (error) return { isValid: false, message: error.details[0].message };
     return { isValid: true, message: "" };
   }
-  post(userID: string, text: string) {
-    const { error, value } = newPostData.validate({ userID, text });
+  post(text: string) {
+    const { error, value } = newPostData.validate({ text });
     if (error) return { isValid: false, message: error.details[0].message };
     return { isValid: true, message: "" };
   }

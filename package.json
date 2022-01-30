@@ -4,11 +4,12 @@
   "description": "A basic rest Api",
   "main": "src/app.ts",
   "scripts": {
-    "prod": " NODE_ENV=production node build/app.js",
+    "start": " NODE_ENV=production node build/app.js",
     "dev": "NODE_ENV=dev ts-node-dev --respawn --transpile-only src/app.ts",
     "build": "NODE_ENV=production tsc --target ES5 --experimentalDecorators --emitDecoratorMetadata",
     "typeorm": "ts-node-dev node_modules/typeorm/cli.js",
-    "typeorm:schema:sync": "ts-node-dev node_modules/typeorm/cli.js schema:sync"
+    "typeorm:schema:sync": "NODE_ENV=dev ts-node-dev node_modules/typeorm/cli.js schema:sync",
+    "typeorm:schema:drop": " NODE_ENV=dev ts-node-dev node_modules/typeorm/cli.js schema:drop"
   },
   "keywords": [],
   "author": "edilsonjmavone",
@@ -17,6 +18,7 @@
     "@types/jsonwebtoken": "^8.5.8",
     "@types/uuid": "^8.3.3",
     "body-parser": "^1.19.1",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "joi": "^17.5.0",
@@ -28,6 +30,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.2",
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/node": "^17.0.0",

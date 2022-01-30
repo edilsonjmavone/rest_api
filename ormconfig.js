@@ -1,6 +1,6 @@
 const dotenv = require("dotenv");
 const env = process.env.NODE_ENV;
-console.log(`${env} from seila `);
+//console.log(`${env} from seila `);
 
 dotenv.config({
   path: process.env.NODE_ENV == "dev" ? ".env.dev" : ".env.production"
