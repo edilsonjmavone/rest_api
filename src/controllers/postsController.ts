@@ -12,7 +12,10 @@ export class PostController {
     try {
       const data = await postRepository.getAll();
 
-      return res.status(200).send(data);
+      return res
+        .status(200)
+        .json(data)
+        .end();
     } catch (error) {
       next(new HandleError("Internal server error"));
       return;
@@ -44,7 +47,7 @@ export class PostController {
 
       return res.status(204).end();
     } catch (error) {
-      next(new HandleError("Internal server error"));
+      next(new HandleError("Internal server  post error"));
       return;
     }
   }

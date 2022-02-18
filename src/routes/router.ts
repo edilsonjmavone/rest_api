@@ -10,7 +10,7 @@ const userLoginController = new UserLoginController();
 
 export const routes = Router();
 routes
-  .post("/user/sigin", userController.addUser)
+  .post("/user/register", userController.addUser)
   .post("/user/login", userLoginController.login)
   .get("/user/refresh", verifyRefresh, userLoginController.userRefreshAuth)
   .get("/user/logout", verifyRefresh, userLoginController.logout)

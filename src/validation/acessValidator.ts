@@ -39,12 +39,22 @@ export const verifyRefresh = (
 
 // return the auth token data
 export const getTokenData = (token: string) => {
-  return jwt.verify(token, secretKey);
+  try {
+    
+    return jwt.verify(token, secretKey);
+  } catch (error) {
+    
+  }
 };
 
 // return the refresh token data
 export const getRefreshTokenData = (token: string) => {
-  return jwt.verify(token, secretRefreshKey);
+  try {
+    
+    return jwt.verify(token, secretRefreshKey);
+  } catch (error) {
+    
+  }
 };
 
 // reaturns a refresh token

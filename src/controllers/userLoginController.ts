@@ -16,6 +16,7 @@ export class UserLoginController {
   async login(req: Request, res: Response, next: NextFunction) {
     const userRepo = getCustomRepository(UserRepository);
     const { email, password } = req.body;
+    console.dir( req.body );
     const { isValid, message } = validator.login(email, password);
 
     if (!isValid) return res.status(400).json(message);
