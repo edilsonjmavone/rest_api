@@ -4,7 +4,7 @@ import { PostRepository } from "../database/repositorys/PostRepository";
 import { UserRepository } from "../database/repositorys/UserRepository";
 import { HandleError } from "../error/handleError";
 import Validator from "../validation/dataValidator";
-import { getTokenData } from "../validation/acessValidator";
+// import { getTokenData } from "../validation/acessValidator";
 const validator = new Validator();
 export class PostController {
   async getPost(req: Request, res: Response, next: NextFunction) {
@@ -23,8 +23,8 @@ export class PostController {
   }
   async addPost(req: Request, res: Response, next: NextFunction) {
     let token = req.header("Auth-Token");
-    const tokenData = getTokenData(token);
-    const { text } = req.body;
+    // const tokenData = getTokenData(token);
+    const { text, email } = req.body;
     const { isValid, message } = validator.post(text);
 
     if (!isValid) {
@@ -35,7 +35,7 @@ export class PostController {
     const userRpository = getCustomRepository(UserRepository);
     try {
       const userAlredyExists = await userRpository.findOne({
-        id: (<any>tokenData).id
+        id: res.locals.tokenData.userId
       });
 
       if (!userAlredyExists) {

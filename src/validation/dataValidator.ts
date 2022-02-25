@@ -1,5 +1,5 @@
 import joi from "joi";
-
+// Data validation using joi
 const loginData = joi.object({
   email: joi
     .string()

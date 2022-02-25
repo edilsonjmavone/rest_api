@@ -12,6 +12,7 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: "1mb" }));
 
+// cookie parser
 app.use((req, res, next) => {
   const {
     headers: { cookie }
@@ -30,7 +31,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   console.log(`${req.method} request to ${req.path}`);
   next();
 });
-// TODO: FIX: /users/sigin returns "Forbiden" instead of "unavailable"
+
 app.use(routes);
 
 app.use((err: HandleError, req: Request, res: Response, next: NextFunction) => {

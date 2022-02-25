@@ -10,8 +10,8 @@ const validator = new Validator();
 class UserController {
   async getUser(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params;
-    const userRepository = getCustomRepository(UserRepository);
 
+    const userRepository = getCustomRepository(UserRepository);
     try {
       const data = await userRepository.getAll(id);
 

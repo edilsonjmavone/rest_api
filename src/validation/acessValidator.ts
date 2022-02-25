@@ -10,12 +10,18 @@ export const verify = (req: Request, res: Response, next: NextFunction) => {
   try {
     if (AuthToken) {
       const verified = jwt.verify(AuthToken, secretKey);
+      res.locals.tokenData = { userId: (<any>verified).id };
+      // console.log(res.locals.tokenData);
       next();
     } else {
-      return res.status(400).json({ error: { message: "Forbiden" } });
+      return res
+        .status(400)
+        .json({ error: { message: "Forbiden \n No credencials" } });
     }
   } catch (error) {
-    return res.status(400).json({ error: { message: "Forbiden" } });
+    return res
+      .status(400)
+      .json({ error: { message: "Forbiden \n Invalid crendencials" } });
   }
 };
 // verify the refresh token
@@ -28,6 +34,7 @@ export const verifyRefresh = (
   try {
     if (RefreshToken) {
       const verified = jwt.verify(RefreshToken, secretRefreshKey);
+      res.locals.refreshTokenData = { userId: (<any>verified).id };
       next();
     } else {
       return res.status(400).json({ error: { message: "Forbiden" } });
@@ -37,27 +44,21 @@ export const verifyRefresh = (
   }
 };
 
-// return the auth token data
-export const getTokenData = (token: string) => {
-  try {
-    
-    return jwt.verify(token, secretKey);
-  } catch (error) {
-    
-  }
-};
+// // return the auth token data
+// export const getTokenData = (token: string) => {
+//   try {
+//     return jwt.verify(token, secretKey);
+//   } catch (error) {}
+// };
 
 // return the refresh token data
 export const getRefreshTokenData = (token: string) => {
   try {
-    
     return jwt.verify(token, secretRefreshKey);
-  } catch (error) {
-    
-  }
+  } catch (error) {}
 };
 
-// reaturns a refresh token
+// reaturns the auth token
 export const getToken = (payload: {
   id: string;
   email: string;
@@ -67,7 +68,7 @@ export const getToken = (payload: {
   return token;
 };
 
-// reaturns a refresh token
+// reaturns the refresh token
 export const getRefreshToken = (payload: {
   id: string;
   email: string;
